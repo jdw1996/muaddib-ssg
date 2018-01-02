@@ -2,7 +2,7 @@
 
 > **Paul:**  How do you call among you the little mouse, the mouse that jumps?
 >
-> **Stilgar:**  We call that one *muad'dib*
+> **Stilgar:**  We call that one *muad'dib*.
 >
 > &mdash; <cite>*Dune*, by Frank Herbert</cite>
 
