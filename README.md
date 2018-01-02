@@ -1,5 +1,11 @@
 # Muad'Dib Static Site Generator
 
+> **Paul:**  How do you call among you the little mouse, the mouse that jumps?
+>
+> **Stilgar:**  We call that one *muad'dib*
+>
+> &mdash; <cite>*Dune*, by Frank Herbert</cite>
+
 **This repository is under active development and is not yet in use.**
 
 I've been using Jekyll for my personal website up until this point, but decided
