@@ -15,14 +15,16 @@ CORRECT_USAGE = (
     "    muaddib.py"
 )
 INVALID_ARGUMENTS = "The arguments you entered are invalid."
-INVALID_SOURCE_DIR = "The source directory you indicated does not exist."
+INVALID_DIR = "The source directories you indicated do not exist."
 
 FLAG_HELP = "-h"
-FLAG_SOURCE = "-s"
+FLAG_SOURCE_DIR = "-s"
+FLAG_BLOG_DIR = "-b"
 
 ARG_DICT = {
     "--help": FLAG_HELP,
-    "--source": FLAG_SOURCE
+    "--source": FLAG_SOURCE_DIR,
+    "--blog": FLAG_BLOG_DIR
 }
 
 # Utilities.
@@ -38,7 +40,13 @@ class InvalidSourceException(Exception):
 
 # Prepare individual pages.
 
-# Organize pages into site.
+def process_page(page_file):
+    pass
+
+# Organize the blog.
+
+def process_blog(blog_dir):
+    pass
 
 # Compile the site.
 
@@ -46,7 +54,7 @@ def split_flags(loa):
     """Return a version of loa with single letter flags split apart.
 
     Args:
-        loa (List(str)): The list of arguments in which the flags must be
+        loa (list(str)): The list of arguments in which the flags must be
             split.
     """
     new_loa = []
@@ -64,10 +72,19 @@ def split_flags(loa):
     return new_loa
 
 def main(**kwargs):
-    pass
+    """Prepare the blog."""
+    source_dir = kwargs["source_dir"]
+    blog_dir = kwargs["blog_dir"]
+    with os.scandir(source_dir) as source_files:
+        for entry in source_files:
+            if entry.is_file():
+                process_page(entry)
+            elif entry.name == blog_dir:
+                process_blog(entry)
 
 if __name__ == "__main__":
     source_dir = "_src"
+    blog_dir = "blog"
     try:
         args = split_flags(sys.argv[1:])
         i = 0
@@ -75,11 +92,16 @@ if __name__ == "__main__":
             curr_arg = args[i]
             if curr_arg == FLAG_HELP:
                 break
-            elif curr_arg == FLAG_SOURCE:
+            elif curr_arg == FLAG_SOURCE_DIR:
                 i += 1
                 source_dir = curr_arg
+            elif curr_arg == FLAG_BLOG_DIR:
+                i += 1
+                blog_dir = curr_arg
             i += 1
         if not os.path.isdir(source_dir):
+            raise InvalidSourceException
+        if not os.path.isdir(os.path.join(source_dir, blog_dir)):
             raise InvalidSourceException
     except InvalidCommandException:
         print(INVALID_ARGUMENTS)
@@ -87,7 +109,7 @@ if __name__ == "__main__":
     except SeekingHelpException:
         print(CORRECT_USAGE)
     except InvalidSourceException:
-        print(INVALID_SOURCE_DIR)
+        print(INVALID_DIR)
         print(CORRECT_USAGE)
     else:
-        main(source_dir=source_dir)
+        main(source_dir=source_dir, blog_dir=blog_dir)
