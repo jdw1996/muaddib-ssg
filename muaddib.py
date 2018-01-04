@@ -5,7 +5,7 @@ import sys
 import re
 
 import bs4
-from css_html_js_minify import css_minify, html_minify, js_minify
+from css_html_js_minify import css_minify, html_minify
 import markdown as md
 
 # Constants.
