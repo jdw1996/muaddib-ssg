@@ -38,9 +38,18 @@ class SeekingHelpException(Exception):
 class InvalidSourceException(Exception):
     pass
 
-# Prepare individual pages.
+class InvalidFileTypeException(Exception):
+    pass
 
-def process_page(page_file):
+# Prepare individual pages and files.
+
+def process_html_page(page_file):
+    pass
+
+def process_md_page(page_file):
+    pass
+
+def process_css(css_file):
     pass
 
 # Organize the blog.
@@ -78,7 +87,15 @@ def main(**kwargs):
     with os.scandir(source_dir) as source_files:
         for entry in source_files:
             if entry.is_file():
-                process_page(entry)
+                extension = os.path.splitext(entry.name)[-1]
+                if extension == "html":
+                    process_html_page(entry)
+                elif extension == "md":
+                    process_md_page(entry)
+                elif extension == "css":
+                    process_css(entry)
+                else:
+                    raise InvalidFileTypeException(entry.path)
             elif entry.name == blog_dir:
                 process_blog(entry)
 
