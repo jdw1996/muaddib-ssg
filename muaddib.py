@@ -68,7 +68,6 @@ def main(**kwargs):
 
 if __name__ == "__main__":
     source_dir = "_src"
-    args = []
     try:
         args = split_flags(sys.argv[1:])
         i = 0
