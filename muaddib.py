@@ -2,6 +2,7 @@
 
 import os
 import sys
+import datetime
 import re
 
 import bs4
@@ -29,6 +30,10 @@ ARG_DICT = {
     "--blog": FLAG_BLOG_DIR
 }
 
+UNIVERSAL_SUBSTITUTIONS = {
+    "$YEAR": datetime.datetime.now().year
+}
+
 # Utilities.
 
 class InvalidCommandException(Exception):
@@ -46,12 +51,18 @@ class InvalidFileTypeException(Exception):
 def clean():
     pass
 
+def make_substitutions(file_content, **kwargs):
+    pass
+
 # Prepare individual pages and files.
 
 def process_html_page(page_file):
     pass
 
 def process_md_page(page_file):
+    pass
+
+def process_md_post(post_file):
     pass
 
 def process_css(css_file):
