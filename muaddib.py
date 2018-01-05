@@ -18,11 +18,13 @@ INVALID_ARGUMENTS = "The arguments you entered are invalid."
 INVALID_DIR = "The source directories you indicated do not exist."
 
 FLAG_HELP = "-h"
+FLAG_CLEAN = "-c"
 FLAG_SOURCE_DIR = "-s"
 FLAG_BLOG_DIR = "-b"
 
 ARG_DICT = {
     "--help": FLAG_HELP,
+    "--clean": FLAG_CLEAN,
     "--source": FLAG_SOURCE_DIR,
     "--blog": FLAG_BLOG_DIR
 }
@@ -39,6 +41,9 @@ class InvalidSourceException(Exception):
     pass
 
 class InvalidFileTypeException(Exception):
+    pass
+
+def clean():
     pass
 
 # Prepare individual pages and files.
@@ -102,6 +107,7 @@ def main(**kwargs):
 if __name__ == "__main__":
     source_dir = "_src"
     blog_dir = "blog"
+    clean_only = False
     try:
         args = split_flags(sys.argv[1:])
         i = 0
@@ -109,6 +115,9 @@ if __name__ == "__main__":
             curr_arg = args[i]
             if curr_arg == FLAG_HELP:
                 raise SeekingHelpException
+            elif curr_arg == FLAG_CLEAN:
+                clean_only = True
+                break
             elif curr_arg == FLAG_SOURCE_DIR:
                 i += 1
                 source_dir = args[i]
@@ -129,4 +138,7 @@ if __name__ == "__main__":
         print(INVALID_DIR)
         print(CORRECT_USAGE)
     else:
-        main(source_dir=source_dir, blog_dir=blog_dir)
+        if clean_only:
+            clean()
+        else:
+            main(source_dir=source_dir, blog_dir=blog_dir)
