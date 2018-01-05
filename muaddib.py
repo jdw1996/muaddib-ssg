@@ -77,7 +77,7 @@ def split_flags(loa):
         elif arg in ARG_DICT.keys():
             new_loa.append(ARG_DICT[arg])
         else:
-            raise InvalidCommandException
+            new_loa.append(arg)
     return new_loa
 
 def main(**kwargs):
@@ -111,10 +111,10 @@ if __name__ == "__main__":
                 break
             elif curr_arg == FLAG_SOURCE_DIR:
                 i += 1
-                source_dir = curr_arg
+                source_dir = args[i]
             elif curr_arg == FLAG_BLOG_DIR:
                 i += 1
-                blog_dir = curr_arg
+                blog_dir = args[i]
             i += 1
         if not os.path.isdir(source_dir):
             raise InvalidSourceException
