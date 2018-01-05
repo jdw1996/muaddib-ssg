@@ -108,7 +108,7 @@ if __name__ == "__main__":
         while i < len(args):
             curr_arg = args[i]
             if curr_arg == FLAG_HELP:
-                break
+                raise SeekingHelpException
             elif curr_arg == FLAG_SOURCE_DIR:
                 i += 1
                 source_dir = args[i]
