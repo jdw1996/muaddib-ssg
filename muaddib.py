@@ -102,17 +102,18 @@ def main(**kwargs):
     blog_dir = kwargs["blog_dir"]
     with os.scandir(source_dir) as source_files:
         for entry in source_files:
+            entry_name = entry.name
             if entry.is_file():
-                extension = os.path.splitext(entry.name)[-1]
+                extension = os.path.splitext(entry_name)[-1]
                 if extension == "html":
-                    process_html_page(entry)
+                    process_html_page(entry_name)
                 elif extension == "md":
-                    process_md_page(entry)
+                    process_md_page(entry_name)
                 elif extension == "css":
-                    process_css(entry)
+                    process_css(entry_name)
                 else:
                     raise InvalidFileTypeException(entry.path)
-            elif entry.name == blog_dir:
+            elif entry_name == blog_dir:
                 process_blog(entry)
 
 if __name__ == "__main__":
