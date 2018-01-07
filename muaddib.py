@@ -52,6 +52,13 @@ def clean():
     pass
 
 def make_substitutions(file_content, **kwargs):
+    """Return a version of file_content with all replacements from kwargs.
+
+    Args:
+        file_content (str): The string in which substitutions should be
+            made.
+        kwargs (dict(str, str)): Keys will be replaced with values.
+    """
     content_with_substitutions = file_content
     for key in kwargs:
         content_with_substitutions.replace(key, kwargs[key])
