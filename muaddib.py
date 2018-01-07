@@ -52,7 +52,10 @@ def clean():
     pass
 
 def make_substitutions(file_content, **kwargs):
-    pass
+    content_with_substitutions = file_content
+    for key in kwargs:
+        content_with_substitutions.replace(key, kwargs[key])
+    return content_with_substitutions
 
 # Prepare individual pages and files.
 
