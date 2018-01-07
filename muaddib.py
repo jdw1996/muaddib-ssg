@@ -136,9 +136,10 @@ if __name__ == "__main__":
                 i += 1
                 blog_dir = args[i]
             i += 1
+        blog_dir = os.path.join(source_dir, blog_dir)
         if not os.path.isdir(source_dir):
             raise InvalidSourceException
-        if not os.path.isdir(os.path.join(source_dir, blog_dir)):
+        if not os.path.isdir(blog_dir) and not clean_only:
             raise InvalidSourceException
     except InvalidCommandException:
         print(INVALID_ARGUMENTS)
