@@ -48,6 +48,24 @@ class InvalidSourceException(Exception):
 class InvalidFileTypeException(Exception):
     pass
 
+def split_flags(loa):
+    """Return a version of loa with single letter flags split apart.
+
+    Args:
+        loa (list(str)): The list of arguments in which the flags must be
+            split.
+    """
+    new_loa = []
+    for arg in loa:
+        if re.fullmatch("-[a-zA-Z]+", arg):
+            for char in arg[1:]:
+                new_loa.append("-" + char)
+        elif arg in ARG_DICT.keys():
+            new_loa.append(ARG_DICT[arg])
+        else:
+            new_loa.append(arg)
+    return new_loa
+
 def clean():
     pass
 
@@ -116,27 +134,6 @@ def process_blog(blog_dir):
     pass
 
 # Compile the site.
-
-def split_flags(loa):
-    """Return a version of loa with single letter flags split apart.
-
-    Args:
-        loa (list(str)): The list of arguments in which the flags must be
-            split.
-    """
-    new_loa = []
-    for arg in loa:
-        if re.fullmatch("-[a-zA-Z]+", arg):
-            for char in arg[1:]:
-                flag = "-" + char
-                if flag not in ARG_DICT.values():
-                    raise InvalidCommandException
-                new_loa.append("-" + char)
-        elif arg in ARG_DICT.keys():
-            new_loa.append(ARG_DICT[arg])
-        else:
-            new_loa.append(arg)
-    return new_loa
 
 def main(**kwargs):
     """Prepare the blog."""
