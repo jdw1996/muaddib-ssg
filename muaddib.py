@@ -66,13 +66,45 @@ def make_substitutions(file_content, **kwargs):
 
 # Prepare individual pages and files.
 
-def process_html_page(page_file):
-    pass
+def process_page(page_file, is_markdown):
+    """Process page and write to new file for website.
 
-def process_md_page(page_file):
-    pass
+    Args:
+        page_file (str): Location of the file to process as a new page.
+        is_markdown (bool): If true, page_file is Markdown; else HTML.
+    """
+    content = ""
+    # Read in file contents.
+    with open(page_file, "r") as page:
+        content = page.read()
+    if is_markdown:
+        content = md.markdown(content)
+    # Get title of page.
+    title = bs4(content).h1.extract()
+    title = title[title.find(">") + 1:]
+    title = title[:title.find("<")]
+    # Get date and new filename.
+    split_filename = os.path.basename(page_file).split("-")
+    year = split_filename[0]
+    month = split_filename[1]
+    day = split_filename[2]
+    date_string = "-".join(split_filename[:3])
+    new_filename = "-".join(split_filename[3:])
+    # Make necessary substitutions.
+    substitutions = {}
+    substitutions["$BODY"] = content
+    substitutions["$TITLE"] = title
+    substitutions["$DATE"] = date_string
+    content = \
+        make_substitutions(content, **substitutions, **UNIVERSAL_SUBSTITUTIONS)
+    content = html_minify(content)
+    # Create new file.
+    post_dir = os.path.join(year, month, day)
+    os.makedirs(post_dir, exist_ok=True)
+    with open(os.path.join(post_dir, new_filename), "w") as new_file:
+        new_file.write(content)
 
-def process_md_post(post_file):
+def process_post(post_file, is_markdown):
     pass
 
 def process_css(css_file):
@@ -116,15 +148,15 @@ def main(**kwargs):
             if entry.is_file():
                 extension = os.path.splitext(entry_name)[-1]
                 if extension == "html":
-                    process_html_page(entry_name)
+                    process_page(entry_name, False)
                 elif extension == "md":
-                    process_md_page(entry_name)
+                    process_page(entry_name, True)
                 elif extension == "css":
                     process_css(entry_name)
                 else:
                     raise InvalidFileTypeException(entry.path)
             elif entry_name == blog_dir:
-                process_blog(entry)
+                process_blog(entry_name)
 
 if __name__ == "__main__":
     source_dir = "_src"
