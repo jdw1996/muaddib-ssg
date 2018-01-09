@@ -95,18 +95,27 @@ def process_page(page_file, is_markdown):
         page_file (str): Location of the file to process as a new page.
         is_markdown (bool): If true, page_file is Markdown; else HTML.
     """
+    pass
+
+def process_post(post_file, is_markdown):
+    """Process post and write to new file for website.
+
+    Args:
+        post_file (str): Location of the file to process as a new post.
+        is_markdown (bool): If true, post_file is Markdown; else HTML.
+    """
     content = ""
     # Read in file contents.
-    with open(page_file, "r") as page:
-        content = page.read()
+    with open(post_file, "r") as post:
+        content = post.read()
     if is_markdown:
         content = md.markdown(content)
-    # Get title of page.
+    # Get title of post.
     title = bs4(content).h1.extract()
     title = title[title.find(">") + 1:]
     title = title[:title.find("<")]
     # Get date and new filename.
-    split_filename = os.path.basename(page_file).split("-")
+    split_filename = os.path.basename(post_file).split("-")
     year = split_filename[0]
     month = split_filename[1]
     day = split_filename[2]
@@ -125,9 +134,6 @@ def process_page(page_file, is_markdown):
     os.makedirs(post_dir, exist_ok=True)
     with open(os.path.join(post_dir, new_filename), "w") as new_file:
         new_file.write(content)
-
-def process_post(post_file, is_markdown):
-    pass
 
 def process_css(css_file):
     pass
