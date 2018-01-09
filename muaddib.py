@@ -22,12 +22,16 @@ FLAG_HELP = "-h"
 FLAG_CLEAN = "-c"
 FLAG_SOURCE_DIR = "-s"
 FLAG_BLOG_DIR = "-b"
+FLAG_PAGE_TEMPLATE = "-P"
+FLAG_POST_TEMPLATE = "-p"
 
 ARG_DICT = {
     "--help": FLAG_HELP,
     "--clean": FLAG_CLEAN,
     "--source": FLAG_SOURCE_DIR,
-    "--blog": FLAG_BLOG_DIR
+    "--blog": FLAG_BLOG_DIR,
+    "--page-template": FLAG_PAGE_TEMPLATE,
+    "--post-template": FLAG_POST_TEMPLATE
 }
 
 UNIVERSAL_SUBSTITUTIONS = {
@@ -158,6 +162,8 @@ def main(**kwargs):
 if __name__ == "__main__":
     source_dir = "_src"
     blog_dir = "blog"
+    page_template = "_page.html"
+    post_template = "_post.html"
     clean_only = False
     try:
         args = split_flags(sys.argv[1:])
@@ -168,18 +174,32 @@ if __name__ == "__main__":
                 raise SeekingHelpException
             elif curr_arg == FLAG_CLEAN:
                 clean_only = True
-                break
             elif curr_arg == FLAG_SOURCE_DIR:
                 i += 1
                 source_dir = args[i]
             elif curr_arg == FLAG_BLOG_DIR:
                 i += 1
                 blog_dir = args[i]
+            elif curr_arg == FLAG_PAGE_TEMPLATE:
+                i += 1
+                page_template = args[i]
+            elif curr_arg == FLAG_POST_TEMPLATE:
+                i += 1
+                post_template = args[i]
+            else:
+                raise InvalidCommandException
             i += 1
         blog_dir = os.path.join(source_dir, blog_dir)
-        if not os.path.isdir(source_dir):
-            raise InvalidSourceException
-        if not os.path.isdir(blog_dir) and not clean_only:
+        page_template = os.path.join(source_dir, page_template)
+        post_template = os.path.join(source_dir, post_template)
+        source_valid = os.path.isdir(source_dir) and (
+            clean_only or (
+                os.path.isdir(blog_dir) and
+                os.path.isfile(page_template) and
+                os.path.isfile(post_template)
+            )
+        )
+        if not source_valid:
             raise InvalidSourceException
     except InvalidCommandException:
         print(INVALID_ARGUMENTS)
@@ -193,4 +213,9 @@ if __name__ == "__main__":
         if clean_only:
             clean()
         else:
-            main(source_dir=source_dir, blog_dir=blog_dir)
+            main(
+                source_dir=source_dir,
+                blog_dir=blog_dir,
+                page_template=page_template,
+                post_template=post_template
+            )
