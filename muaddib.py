@@ -95,7 +95,28 @@ def process_page(page_file, is_markdown):
         page_file (str): Location of the file to process as a new page.
         is_markdown (bool): If true, page_file is Markdown; else HTML.
     """
-    pass
+    content = ""
+    # Read in file contents.
+    with open(page_file, "r") as page:
+        content = post.read()
+    new_filename = page_file
+    if is_markdown:
+        content = md.markdown(content)
+        new_filename = os.path.splitext(new_filename)[0] + ".html"
+    # Get title of page.
+    title = bs4(content).h1.extract()
+    title = title[title.find(">") + 1:]
+    title = title[:title.find("<")]
+    # Make necessary substitutions.
+    substitutions = {}
+    substitutions["$BODY"] = content
+    substitutions["$TITLE"] = title
+    content = \
+        make_substitutions(content, **substitutions, **UNIVERSAL_SUBSTITUTIONS)
+    content = html_minify(content)
+    # Create new file.
+    with open(new_filename, "w") as new_file:
+        new_file.write(content)
 
 def process_post(post_file, is_markdown):
     """Process post and write to new file for website.
@@ -121,6 +142,8 @@ def process_post(post_file, is_markdown):
     day = split_filename[2]
     date_string = "-".join(split_filename[:3])
     new_filename = "-".join(split_filename[3:])
+    if is_markdown:
+        new_filename = os.path.splitext(new_filename)[0] + ".html"
     # Make necessary substitutions.
     substitutions = {}
     substitutions["$BODY"] = content
