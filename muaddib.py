@@ -11,6 +11,14 @@ import markdown as md
 
 # Constants.
 
+SOURCE_DIR = "_src"
+BLOG_DIR = os.path.join(SOURCE_DIR, "blog")
+PAGE_TEMPLATE = os.path.join(SOURCE_DIR, "_page.html")
+POST_TEMPLATE = os.path.join(SOURCE_DIR, "_post.html")
+UNIVERSAL_SUBSTITUTIONS = {
+    "$YEAR": datetime.datetime.now().year
+}
+
 CORRECT_USAGE = (
     "Usage:\n"
     "    muaddib.py"
@@ -20,22 +28,10 @@ INVALID_DIR = "The source directories you indicated do not exist."
 
 FLAG_HELP = "-h"
 FLAG_CLEAN = "-c"
-FLAG_SOURCE_DIR = "-s"
-FLAG_BLOG_DIR = "-b"
-FLAG_PAGE_TEMPLATE = "-P"
-FLAG_POST_TEMPLATE = "-p"
 
 ARG_DICT = {
     "--help": FLAG_HELP,
     "--clean": FLAG_CLEAN,
-    "--source": FLAG_SOURCE_DIR,
-    "--blog": FLAG_BLOG_DIR,
-    "--page-template": FLAG_PAGE_TEMPLATE,
-    "--post-template": FLAG_POST_TEMPLATE
-}
-
-UNIVERSAL_SUBSTITUTIONS = {
-    "$YEAR": datetime.datetime.now().year
 }
 
 # Utilities.
@@ -168,11 +164,9 @@ def process_blog(blog_dir):
 
 # Compile the site.
 
-def main(**kwargs):
+def main():
     """Prepare the blog."""
-    source_dir = kwargs["source_dir"]
-    blog_dir = kwargs["blog_dir"]
-    with os.scandir(source_dir) as source_files:
+    with os.scandir(SOURCE_DIR) as source_files:
         for entry in source_files:
             entry_name = entry.name
             if entry.is_file():
@@ -185,14 +179,10 @@ def main(**kwargs):
                     process_css(entry_name)
                 else:
                     raise InvalidFileTypeException(entry.path)
-            elif entry_name == blog_dir:
+            elif entry_name == BLOG_DIR:
                 process_blog(entry_name)
 
 if __name__ == "__main__":
-    source_dir = "_src"
-    blog_dir = "blog"
-    page_template = "_page.html"
-    post_template = "_post.html"
     clean_only = False
     try:
         args = split_flags(sys.argv[1:])
@@ -203,29 +193,14 @@ if __name__ == "__main__":
                 raise SeekingHelpException
             elif curr_arg == FLAG_CLEAN:
                 clean_only = True
-            elif curr_arg == FLAG_SOURCE_DIR:
-                i += 1
-                source_dir = args[i]
-            elif curr_arg == FLAG_BLOG_DIR:
-                i += 1
-                blog_dir = args[i]
-            elif curr_arg == FLAG_PAGE_TEMPLATE:
-                i += 1
-                page_template = args[i]
-            elif curr_arg == FLAG_POST_TEMPLATE:
-                i += 1
-                post_template = args[i]
             else:
                 raise InvalidCommandException
             i += 1
-        blog_dir = os.path.join(source_dir, blog_dir)
-        page_template = os.path.join(source_dir, page_template)
-        post_template = os.path.join(source_dir, post_template)
-        source_valid = os.path.isdir(source_dir) and (
+        source_valid = os.path.isdir(SOURCE_DIR) and (
             clean_only or (
-                os.path.isdir(blog_dir) and
-                os.path.isfile(page_template) and
-                os.path.isfile(post_template)
+                os.path.isdir(BLOG_DIR) and
+                os.path.isfile(PAGE_TEMPLATE) and
+                os.path.isfile(POST_TEMPLATE)
             )
         )
         if not source_valid:
@@ -242,9 +217,4 @@ if __name__ == "__main__":
         if clean_only:
             clean()
         else:
-            main(
-                source_dir=source_dir,
-                blog_dir=blog_dir,
-                page_template=page_template,
-                post_template=post_template
-            )
+            main()
