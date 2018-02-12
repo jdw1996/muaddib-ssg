@@ -24,7 +24,7 @@ CORRECT_USAGE = (
     "    muaddib.py"
 )
 INVALID_ARGUMENTS = "The arguments you entered are invalid."
-INVALID_DIR = "The source directories you indicated do not exist."
+INVALID_DIR = "The necessary source directories do not exist."
 
 FLAG_HELP = "-h"
 FLAG_CLEAN = "-c"
@@ -166,36 +166,16 @@ def process_blog(blog_dir):
 
 def main():
     """Prepare the blog."""
-    with os.scandir(SOURCE_DIR) as source_files:
-        for entry in source_files:
-            entry_name = entry.name
-            if entry.is_file():
-                extension = os.path.splitext(entry_name)[-1]
-                if extension == "html":
-                    process_page(entry_name, False)
-                elif extension == "md":
-                    process_page(entry_name, True)
-                elif extension == "css":
-                    process_css(entry_name)
-                else:
-                    raise InvalidFileTypeException(entry.path)
-            elif entry_name == BLOG_DIR:
-                process_blog(entry_name)
-
-if __name__ == "__main__":
     clean_only = False
     try:
         args = split_flags(sys.argv[1:])
-        i = 0
-        while i < len(args):
-            curr_arg = args[i]
-            if curr_arg == FLAG_HELP:
+        for arg in args:
+            if arg == FLAG_HELP:
                 raise SeekingHelpException
-            elif curr_arg == FLAG_CLEAN:
+            elif arg == FLAG_CLEAN:
                 clean_only = True
             else:
                 raise InvalidCommandException
-            i += 1
         source_valid = os.path.isdir(SOURCE_DIR) and (
             clean_only or (
                 os.path.isdir(BLOG_DIR) and
@@ -217,4 +197,22 @@ if __name__ == "__main__":
         if clean_only:
             clean()
         else:
-            main()
+            generate()
+    with os.scandir(SOURCE_DIR) as source_files:
+        for entry in source_files:
+            entry_name = entry.name
+            if entry.is_file():
+                extension = os.path.splitext(entry_name)[-1]
+                if extension == "html":
+                    process_page(entry_name, False)
+                elif extension == "md":
+                    process_page(entry_name, True)
+                elif extension == "css":
+                    process_css(entry_name)
+                else:
+                    raise InvalidFileTypeException(entry.path)
+            elif entry_name == BLOG_DIR:
+                process_blog(entry_name)
+
+if __name__ == "__main__":
+    main()
