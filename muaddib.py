@@ -78,8 +78,8 @@ def make_substitutions(file_content, **kwargs):
         kwargs (dict(str, str)): Keys will be replaced with values.
     """
     content_with_substitutions = file_content
-    for key in kwargs:
-        content_with_substitutions.replace(key, kwargs[key])
+    for k, v in kwargs.items():
+        content_with_substitutions.replace(k, v)
     return content_with_substitutions
 
 # Prepare individual pages and files.
