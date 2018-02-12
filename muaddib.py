@@ -24,7 +24,7 @@ CORRECT_USAGE = (
     "    muaddib.py"
 )
 INVALID_ARGUMENTS = "The arguments you entered are invalid."
-INVALID_DIR = "The necessary source directories do not exist."
+INVALID_DIR = "The necessary source files do not exist."
 
 FLAG_HELP = "-h"
 FLAG_CLEAN = "-c"
