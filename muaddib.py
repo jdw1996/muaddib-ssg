@@ -164,6 +164,23 @@ def process_blog(blog_dir):
 
 # Compile the site.
 
+def generate():
+    with os.scandir(SOURCE_DIR) as source_files:
+        for entry in source_files:
+            entry_name = entry.name
+            if entry.is_file():
+                extension = os.path.splitext(entry_name)[-1]
+                if extension == "html":
+                    process_page(entry_name, False)
+                elif extension == "md":
+                    process_page(entry_name, True)
+                elif extension == "css":
+                    process_css(entry_name)
+                else:
+                    raise InvalidFileTypeException(entry.path)
+            elif entry_name == BLOG_DIR:
+                process_blog(entry_name)
+
 def main():
     """Prepare the blog."""
     clean_only = False
@@ -198,21 +215,6 @@ def main():
             clean()
         else:
             generate()
-    with os.scandir(SOURCE_DIR) as source_files:
-        for entry in source_files:
-            entry_name = entry.name
-            if entry.is_file():
-                extension = os.path.splitext(entry_name)[-1]
-                if extension == "html":
-                    process_page(entry_name, False)
-                elif extension == "md":
-                    process_page(entry_name, True)
-                elif extension == "css":
-                    process_css(entry_name)
-                else:
-                    raise InvalidFileTypeException(entry.path)
-            elif entry_name == BLOG_DIR:
-                process_blog(entry_name)
 
 if __name__ == "__main__":
     main()
