@@ -165,6 +165,7 @@ def process_blog(blog_dir):
 # Compile the site.
 
 def generate():
+    """Compile all pages and posts for the website."""
     with os.scandir(SOURCE_DIR) as source_files:
         for entry in source_files:
             entry_name = entry.name
@@ -177,7 +178,7 @@ def generate():
                 elif extension == "css":
                     process_css(entry_name)
                 else:
-                    raise InvalidFileTypeException(entry.path)
+                    continue
             elif entry_name == BLOG_DIR:
                 process_blog(entry_name)
 
