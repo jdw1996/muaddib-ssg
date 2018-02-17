@@ -18,7 +18,10 @@ POST_TEMPLATE = os.path.join(SOURCE_DIR, "_post.html")
 UNIVERSAL_SUBSTITUTIONS = {
     "$YEAR": datetime.datetime.now().year
 }
-CSS_DIR = "assets/css/"
+
+ASSETS_DIR = "assets/"
+CSS_DIR = os.path.join(ASSETS_DIR, "css/")
+IMAGE_DIR = os.path.join(ASSETS_DIR, "img/")
 
 CORRECT_USAGE = (
     "Usage:\n"
