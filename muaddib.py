@@ -96,6 +96,7 @@ def process_page(page_file, is_markdown):
         is_markdown (bool): If true, page_file is Markdown; else HTML.
     """
     content = ""
+    template = ""
     # Read in file contents.
     with open(page_file, "r") as page:
         content = post.read()
@@ -103,6 +104,8 @@ def process_page(page_file, is_markdown):
     if is_markdown:
         content = md.markdown(content)
         new_filename = os.path.splitext(new_filename)[0] + ".html"
+    with open(PAGE_TEMPLATE, "r") as page_template:
+        template = page_template.read()
     # Get title of page.
     title = bs4(content).h1.extract()
     title = title[title.find(">") + 1:]
@@ -112,7 +115,7 @@ def process_page(page_file, is_markdown):
     substitutions["$BODY"] = content
     substitutions["$TITLE"] = title
     content = \
-        make_substitutions(content, **substitutions, **UNIVERSAL_SUBSTITUTIONS)
+        make_substitutions(template, **substitutions, **UNIVERSAL_SUBSTITUTIONS)
     content = html_minify(content)
     # Create new file.
     with open(new_filename, "w") as new_file:
@@ -126,11 +129,14 @@ def process_post(post_file, is_markdown):
         is_markdown (bool): If true, post_file is Markdown; else HTML.
     """
     content = ""
+    template = ""
     # Read in file contents.
     with open(post_file, "r") as post:
         content = post.read()
     if is_markdown:
         content = md.markdown(content)
+    with open(POST_TEMPLATE, "r") as post_template:
+        template = post_template.read()
     # Get title of post.
     title = bs4(content).h1.extract()
     title = title[title.find(">") + 1:]
@@ -150,7 +156,7 @@ def process_post(post_file, is_markdown):
     substitutions["$TITLE"] = title
     substitutions["$DATE"] = date_string
     content = \
-        make_substitutions(content, **substitutions, **UNIVERSAL_SUBSTITUTIONS)
+        make_substitutions(template, **substitutions, **UNIVERSAL_SUBSTITUTIONS)
     content = html_minify(content)
     # Create new file.
     post_dir = os.path.join(year, month, day)
