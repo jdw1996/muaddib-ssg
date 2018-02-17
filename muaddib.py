@@ -71,7 +71,11 @@ def split_flags(loa):
     return new_loa
 
 def clean():
-    pass
+    """Remove all files not in the website source directory."""
+    with os.scandir(".") as files:
+        for entry in files:
+            if entry.name != SOURCE_DIR:
+                os.remove(entry.path)
 
 def make_substitutions(file_content, **kwargs):
     """Return a version of file_content with all replacements from kwargs.
