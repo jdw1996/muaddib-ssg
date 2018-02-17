@@ -18,6 +18,7 @@ POST_TEMPLATE = os.path.join(SOURCE_DIR, "_post.html")
 UNIVERSAL_SUBSTITUTIONS = {
     "$YEAR": datetime.datetime.now().year
 }
+CSS_DIR = "assets/css/"
 
 CORRECT_USAGE = (
     "Usage:\n"
@@ -155,7 +156,22 @@ def process_post(post_file, is_markdown):
         new_file.write(content)
 
 def process_css(css_file):
-    pass
+    """Process a CSS file and write to new file for website.
+
+    Args:
+        css_file (str): Location of the file to process as a new stylesheet.
+    """
+    content = ""
+    # Read in file contents.
+    with open(css_file, "r") as css:
+        content = css.read()
+    # Perform processing.
+    content = css_minify(content)
+    # Get new filename.
+    new_filename = os.path.basename(css_file)
+    # Create new file.
+    with open(os.path.join(CSS_DIR, new_filename), "w") as new_file:
+        new_file.write(content)
 
 # Organize the blog.
 
