@@ -29,6 +29,10 @@ CORRECT_USAGE = (
 )
 INVALID_ARGUMENTS = "The arguments you entered are invalid."
 INVALID_DIR = "The necessary source files do not exist."
+DELETION_WARNING = "The following files will be deleted:"
+DELETION_CONFIRMATION = "Do you wish to proceed in deleting these files? "
+INVALID_CONFIRMATION = "Invalid response."
+CLEAN_FAILED = "Cleaning directory failed.  Unable to complete execution."
 
 FLAG_HELP = "-h"
 FLAG_CLEAN = "-c"
@@ -52,6 +56,9 @@ class InvalidSourceException(Exception):
 class InvalidFileTypeException(Exception):
     pass
 
+class UncleanException(Exception):
+    pass
+
 def split_flags(loa):
     """Return a version of loa with single letter flags split apart.
 
@@ -72,10 +79,29 @@ def split_flags(loa):
 
 def clean():
     """Remove all files not in the website source directory."""
+    deletion_list = []
     with os.scandir(".") as files:
         for entry in files:
             if entry.name != SOURCE_DIR:
-                os.remove(entry.path)
+                deletion_list.append(entry.path)
+    print(DELETION_WARNING)
+    for path in deletion_list:
+        print(path)
+    can_delete = False
+    while True:
+        response = input(DELETION_CONFIRMATION)
+        if response in "Yy":
+            can_delete = True
+            break
+        elif response in "Nn":
+            can_delete = False
+            break
+        else:
+            print(INVALID_CONFIRMATION)
+    if not can_delete:
+        raise(UncleanException)
+    for path in deletion_list:
+        os.remove(path)
 
 def make_substitutions(file_content, **kwargs):
     """Return a version of file_content with all replacements from kwargs.
@@ -246,10 +272,13 @@ def main():
         print(INVALID_DIR)
         print(CORRECT_USAGE)
     else:
-        if clean_only:
-            clean()
-        else:
-            generate()
+        try:
+            if clean_only:
+                clean()
+            else:
+                generate()
+        except UncleanException:
+            print(CLEAN_FAILED)
 
 if __name__ == "__main__":
     main()
