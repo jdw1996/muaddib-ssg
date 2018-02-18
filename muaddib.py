@@ -188,8 +188,15 @@ def process_css(css_file):
 
 # Organize the blog.
 
-def process_blog(blog_dir):
-    pass
+def process_blog():
+    """Compile all blog posts for the website."""
+    with os.scandir(BLOG_DIR) as blog_files:
+        for entry in blog_files:
+            entry_name = entry.name
+            if entry.is_file():
+                extension = os.path.splitext(entry_name)[-1]
+                is_md = extension == "md"
+                process_post(entry_name, is_md)
 
 # Compile the site.
 
@@ -207,8 +214,7 @@ def generate():
                     process_css(entry_name)
                 else:
                     continue
-            elif entry_name == BLOG_DIR:
-                process_blog(entry_name)
+    process_blog()
 
 def main():
     """Prepare the blog."""
