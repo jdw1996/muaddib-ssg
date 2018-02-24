@@ -15,6 +15,10 @@ SOURCE_DIR = "_src"
 BLOG_DIR = os.path.join(SOURCE_DIR, "blog")
 PAGE_TEMPLATE = os.path.join(SOURCE_DIR, "_page.html")
 POST_TEMPLATE = os.path.join(SOURCE_DIR, "_post.html")
+TEMPLATES = [
+    PAGE_TEMPLATE,
+    POST_TEMPLATE
+]
 UNIVERSAL_SUBSTITUTIONS = {
     "YEAR": datetime.datetime.now().year
 }
@@ -244,6 +248,8 @@ def generate():
     """Compile all pages and posts for the website."""
     with os.scandir(SOURCE_DIR) as source_files:
         for entry in source_files:
+            if entry.path in TEMPLATES:
+                continue
             entry_name = entry.name
             if entry.is_file():
                 extension = os.path.splitext(entry_name)[-1]
