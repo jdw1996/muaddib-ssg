@@ -16,7 +16,7 @@ BLOG_DIR = os.path.join(SOURCE_DIR, "blog")
 PAGE_TEMPLATE = os.path.join(SOURCE_DIR, "_page.html")
 POST_TEMPLATE = os.path.join(SOURCE_DIR, "_post.html")
 UNIVERSAL_SUBSTITUTIONS = {
-    "$YEAR": datetime.datetime.now().year
+    "YEAR": datetime.datetime.now().year
 }
 
 ASSETS_DIR = "assets/"
@@ -123,7 +123,7 @@ def make_substitutions(file_content, **kwargs):
     """
     content_with_substitutions = file_content
     for k, v in kwargs.items():
-        content_with_substitutions.replace(k, v)
+        content_with_substitutions.replace("<${}>".format(k), v)
     return content_with_substitutions
 
 # Prepare individual pages and files.
@@ -152,8 +152,8 @@ def process_page(page_file, is_markdown):
     title = title[:title.find("<")]
     # Make necessary substitutions.
     substitutions = {}
-    substitutions["$BODY"] = content
-    substitutions["$TITLE"] = title
+    substitutions["BODY"] = content
+    substitutions["TITLE"] = title
     content = \
         make_substitutions(template, **substitutions, **UNIVERSAL_SUBSTITUTIONS)
     content = html_minify(content)
@@ -192,9 +192,9 @@ def process_post(post_file, is_markdown):
         new_filename = os.path.splitext(new_filename)[0] + ".html"
     # Make necessary substitutions.
     substitutions = {}
-    substitutions["$BODY"] = content
-    substitutions["$TITLE"] = title
-    substitutions["$DATE"] = date_string
+    substitutions["BODY"] = content
+    substitutions["TITLE"] = title
+    substitutions["DATE"] = date_string
     content = \
         make_substitutions(template, **substitutions, **UNIVERSAL_SUBSTITUTIONS)
     content = html_minify(content)
