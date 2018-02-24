@@ -65,6 +65,9 @@ def split_flags(loa):
     Args:
         loa (list(str)): The list of arguments in which the flags must be
             split.
+
+    Returns:
+        (list(str)): A more easily parsed list of arguments.
     """
     new_loa = []
     for arg in loa:
@@ -78,7 +81,11 @@ def split_flags(loa):
     return new_loa
 
 def clean():
-    """Remove all files not in the website source directory."""
+    """Remove all files not in the website source directory.
+
+    Raises:
+        UncleanException: If the user does not confirm deletion.
+    """
     deletion_list = []
     with os.scandir(".") as files:
         for entry in files:
@@ -110,6 +117,9 @@ def make_substitutions(file_content, **kwargs):
         file_content (str): The string in which substitutions should be
             made.
         kwargs (dict(str, str)): Keys will be replaced with values.
+
+    Returns:
+        (str): A modified version of file_content.
     """
     content_with_substitutions = file_content
     for k, v in kwargs.items():
