@@ -294,6 +294,7 @@ def main():
             if clean_only:
                 clean()
             else:
+                clean()
                 generate()
         except UncleanException:
             print(CLEAN_FAILED)
