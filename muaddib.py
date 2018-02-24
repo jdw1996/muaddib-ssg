@@ -231,7 +231,7 @@ def process_blog():
             entry_name = entry.name
             if entry.is_file():
                 extension = os.path.splitext(entry_name)[-1]
-                is_md = extension == "md"
+                is_md = extension == ".md"
                 process_post(entry_name, is_md)
 
 # Compile the site.
@@ -243,10 +243,10 @@ def generate():
             entry_name = entry.name
             if entry.is_file():
                 extension = os.path.splitext(entry_name)[-1]
-                is_md = extension == "md"
-                if is_md or extension == "html":
+                is_md = extension == ".md"
+                if is_md or extension == ".html":
                     process_page(entry_name, is_md)
-                elif extension == "css":
+                elif extension == ".css":
                     process_css(entry_name)
                 else:
                     continue
