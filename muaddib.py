@@ -19,6 +19,10 @@ UNIVERSAL_SUBSTITUTIONS = {
     "YEAR": datetime.datetime.now().year
 }
 
+MARKDOWN_EXTENSION = ".md"
+HTML_EXTENSION = ".html"
+CSS_EXTENSION = ".css"
+
 ASSETS_DIR = "assets/"
 CSS_DIR = os.path.join(ASSETS_DIR, "css/")
 IMAGE_DIR = os.path.join(ASSETS_DIR, "img/")
@@ -143,7 +147,7 @@ def process_page(page_file, is_markdown):
     new_filename = page_file
     if is_markdown:
         content = md.markdown(content)
-        new_filename = os.path.splitext(new_filename)[0] + ".html"
+        new_filename = os.path.splitext(new_filename)[0] + HTML_EXTENSION
     with open(PAGE_TEMPLATE, "r") as page_template:
         template = page_template.read()
     # Get title of page.
@@ -189,7 +193,7 @@ def process_post(post_file, is_markdown):
     date_string = "-".join(split_filename[:3])
     new_filename = "-".join(split_filename[3:])
     if is_markdown:
-        new_filename = os.path.splitext(new_filename)[0] + ".html"
+        new_filename = os.path.splitext(new_filename)[0] + HTML_EXTENSION
     # Make necessary substitutions.
     substitutions = {}
     substitutions["BODY"] = content
@@ -231,7 +235,7 @@ def process_blog():
             entry_name = entry.name
             if entry.is_file():
                 extension = os.path.splitext(entry_name)[-1]
-                is_md = extension == ".md"
+                is_md = extension == MARKDOWN_EXTENSION
                 process_post(entry_name, is_md)
 
 # Compile the site.
@@ -243,13 +247,11 @@ def generate():
             entry_name = entry.name
             if entry.is_file():
                 extension = os.path.splitext(entry_name)[-1]
-                is_md = extension == ".md"
-                if is_md or extension == ".html":
+                is_md = extension == MARKDOWN_EXTENSION
+                if is_md or extension == HTML_EXTENSION:
                     process_page(entry_name, is_md)
-                elif extension == ".css":
+                elif extension == CSS_EXTENSION:
                     process_css(entry_name)
-                else:
-                    continue
     process_blog()
 
 def main():
