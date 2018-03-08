@@ -1,0 +1,25 @@
+#!/usr/bin/make -f
+
+MAKEFLAGS += --warn-undefined-variables
+
+MAIN_PAGE_TEMPLATE := _index.html
+MAIN_PAGE_SOURCE := index.md
+MAIN_PAGE := index.html
+
+BLOG_DIR := _blog
+POST_TEMPLATE := ${BLOG_DIR}/_post.html
+POST_SOURCES := $(wildcard ${BLOG_DIR}/*.md)
+POSTS := $(addsuffix .html,$(basename $(notdir ${POST_SOURCES})))
+
+.PHONY: all clean
+
+all: ${MAIN_PAGE} ${POSTS}
+
+${MAIN_PAGE}:
+	# TODO: Write.
+
+%.html:
+	# TODO: Write.
+
+clean:
+	rm -f ${MAIN_PAGE} ${POSTS}
