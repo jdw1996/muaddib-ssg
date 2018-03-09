@@ -13,7 +13,7 @@ MAIN_PAGE_TEMPLATE := ${BLOG_DIR}/_index.html
 MAIN_PAGE_SOURCE := ${BLOG_DIR}/index.md
 MAIN_PAGE := index.html
 
-STYLESHEET_SOURCE := ${BLOG_DIR}/style.css
+STYLESHEET_SOURCE := ${BLOG_DIR}/_style.css
 STYLESHEET := assets/style.css
 
 .PHONY: all clean
