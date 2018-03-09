@@ -20,7 +20,7 @@ STYLESHEET := assets/style.css
 
 # all: ${MAIN_PAGE} ${POSTS} ${STYLESHEET}
 
-${MAIN_PAGE}:
+${MAIN_PAGE}: ${MAIN_PAGE_SOURCE} ${MAIN_PAGE_TEMPLATE}
 	pandoc ${MAIN_PAGE_SOURCE} -o ${MAIN_PAGE_SOURCE}.tmp
 	sed -e '/{{BODY}}/{r ${MAIN_PAGE_SOURCE}.tmp' -e 'd}' ${MAIN_PAGE_TEMPLATE} > ${MAIN_PAGE}
 	sed -i -e "s/{{TITLE}}/$$(sed -n -e '1{p;q;}' ${MAIN_PAGE_SOURCE} | sed -n -e 's/<!--\(.*\)-->/\1/p')/g" ${MAIN_PAGE}
@@ -28,11 +28,11 @@ ${MAIN_PAGE}:
 	sed -i -e "s/{{YEAR}}/$$(date +'%Y')/g" ${MAIN_PAGE}
 	rm -f ${MAIN_PAGE_SOURCE}.tmp
 
-%.html:
+%.html: ${BLOG_DIR}/%.md
 	# TODO: Write.
 
-%.css:
+${STYLESHEET}: ${STYLESHEET_SOURCE}
 	# TODO: Write.
 
 clean:
-	rm -f ${MAIN_PAGE} ${POSTS}
+	rm -f ${MAIN_PAGE} ${POSTS} ${STYLESHEET}
