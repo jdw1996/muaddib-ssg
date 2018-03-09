@@ -14,7 +14,7 @@ MAIN_PAGE_SOURCE := ${BLOG_DIR}/index.md
 MAIN_PAGE := index.html
 
 STYLESHEET_SOURCE := ${BLOG_DIR}/_style.css
-STYLESHEET := assets/style.css
+STYLESHEET := ${ASSETS_DIR}/style.css
 
 .PHONY: all clean
 
@@ -35,7 +35,7 @@ ${MAIN_PAGE}: ${MAIN_PAGE_SOURCE} ${MAIN_PAGE_TEMPLATE}
 	sed -i -e "s/{{YEAR}}/$$(date +'%Y')/g" $@
 	rm -f $<.tmp
 
-${STYLESHEET}: ${STYLESHEET_SOURCE}
+${STYLESHEET}: ${STYLESHEET_SOURCE} ${ASSETS_DIR}
 	cp -f $< $@
 
 clean:
