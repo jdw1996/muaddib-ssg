@@ -18,7 +18,7 @@ STYLESHEET := assets/style.css
 
 .PHONY: all clean
 
-# all: ${MAIN_PAGE} ${POSTS} ${STYLESHEET}
+all: ${MAIN_PAGE} ${POSTS} ${STYLESHEET}
 
 ${MAIN_PAGE}: ${MAIN_PAGE_SOURCE} ${MAIN_PAGE_TEMPLATE}
 	pandoc $< -o ${MAIN_PAGE_SOURCE}.tmp
@@ -35,7 +35,7 @@ ${MAIN_PAGE}: ${MAIN_PAGE_SOURCE} ${MAIN_PAGE_TEMPLATE}
 	rm -f $<.tmp
 
 ${STYLESHEET}: ${STYLESHEET_SOURCE}
-	# TODO: Write.
+	cp -f $< $@
 
 clean:
 	rm -f ${MAIN_PAGE} ${POSTS} ${STYLESHEET}
