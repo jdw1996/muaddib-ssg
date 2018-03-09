@@ -2,18 +2,23 @@
 
 MAKEFLAGS += --warn-undefined-variables
 
-MAIN_PAGE_TEMPLATE := _index.html
-MAIN_PAGE_SOURCE := index.md
-MAIN_PAGE := index.html
-
 BLOG_DIR := _blog
+ASSETS_DIR := assets
+
 POST_TEMPLATE := ${BLOG_DIR}/_post.html
 POST_SOURCES := $(wildcard ${BLOG_DIR}/*.md)
 POSTS := $(addsuffix .html,$(basename $(notdir ${POST_SOURCES})))
 
+MAIN_PAGE_TEMPLATE := ${BLOG_DIR}/_index.html
+MAIN_PAGE_SOURCE := ${BLOG_DIR}/index.md
+MAIN_PAGE := index.html
+
+STYLESHEET_SOURCE := ${BLOG_DIR}/style.css
+STYLESHEET := assets/style.css
+
 .PHONY: all clean
 
-# all: ${MAIN_PAGE} ${POSTS}
+# all: ${MAIN_PAGE} ${POSTS} ${STYLESHEET}
 
 ${MAIN_PAGE}:
 	pandoc ${MAIN_PAGE_SOURCE} -o ${MAIN_PAGE_SOURCE}.tmp
@@ -24,6 +29,9 @@ ${MAIN_PAGE}:
 	rm -f ${MAIN_PAGE_SOURCE}.tmp
 
 %.html:
+	# TODO: Write.
+
+%.css:
 	# TODO: Write.
 
 clean:
