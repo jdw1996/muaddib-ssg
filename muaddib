@@ -23,6 +23,7 @@ all: ${MAIN_PAGE} ${POSTS} ${STYLESHEET}
 ${MAIN_PAGE}: ${MAIN_PAGE_SOURCE} ${MAIN_PAGE_TEMPLATE}
 	pandoc $< -o ${MAIN_PAGE_SOURCE}.tmp
 	sed -e "/{{BODY}}/{r $<.tmp" -e "d}" ${MAIN_PAGE_TEMPLATE} > $@
+	sed -i -e "s/{{TITLE}}/$$(sed -n -e '1{p;q;}' $< | sed -n -e 's/<!--\(.*\)-->/\1/p')/g" $@
 	sed -i -e "s/{{YEAR}}/$$(date +'%Y')/g" $@
 	rm -f $<.tmp
 
