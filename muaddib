@@ -40,4 +40,4 @@ ${STYLESHEET}: ${STYLESHEET_SOURCE}
 	cp -f $< $@
 
 clean:
-	rm -f ${MAIN_PAGE} ${POSTS} ${STYLESHEET}
+	rm -rf ${MAIN_PAGE} ${POSTS} ${ASSETS_DIR}
