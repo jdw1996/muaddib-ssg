@@ -35,7 +35,8 @@ ${MAIN_PAGE}: ${MAIN_PAGE_SOURCE} ${MAIN_PAGE_TEMPLATE}
 	sed -i -e "s/{{YEAR}}/$$(date +'%Y')/g" $@
 	rm -f $<.tmp
 
-${STYLESHEET}: ${STYLESHEET_SOURCE} ${ASSETS_DIR}
+${STYLESHEET}: ${STYLESHEET_SOURCE}
+	mkdir -p ${ASSETS_DIR}
 	cp -f $< $@
 
 clean:
