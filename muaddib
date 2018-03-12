@@ -2,18 +2,18 @@
 
 MAKEFLAGS += --warn-undefined-variables
 
-BLOG_DIR := _blog
+SOURCE_DIR := _src
 ASSETS_DIR := assets
 
-POST_TEMPLATE := ${BLOG_DIR}/_post.html
-POST_SOURCES := $(wildcard ${BLOG_DIR}/*.md)
+POST_TEMPLATE := ${SOURCE_DIR}/_post.html
+POST_SOURCES := $(wildcard ${SOURCE_DIR}/*.md)
 POSTS := $(addsuffix .html,$(basename $(notdir ${POST_SOURCES})))
 
-MAIN_PAGE_TEMPLATE := ${BLOG_DIR}/_index.html
-MAIN_PAGE_SOURCE := ${BLOG_DIR}/index.md
+MAIN_PAGE_TEMPLATE := ${SOURCE_DIR}/_index.html
+MAIN_PAGE_SOURCE := ${SOURCE_DIR}/index.md
 MAIN_PAGE := index.html
 
-STYLESHEET_SOURCE := ${BLOG_DIR}/_style.css
+STYLESHEET_SOURCE := ${SOURCE_DIR}/_style.css
 STYLESHEET := ${ASSETS_DIR}/style.css
 
 .PHONY: all clean
@@ -27,7 +27,7 @@ ${MAIN_PAGE}: ${MAIN_PAGE_SOURCE} ${MAIN_PAGE_TEMPLATE}
 	sed -i -e "s/{{YEAR}}/$$(date +'%Y')/g" $@
 	rm -f $<.tmp
 
-%.html: ${BLOG_DIR}/%.md ${POST_TEMPLATE}
+%.html: ${SOURCE_DIR}/%.md ${POST_TEMPLATE}
 	pandoc $< -o $<.tmp
 	sed -e "/{{BODY}}/{r $<.tmp" -e "d}" ${POST_TEMPLATE} > $@
 	sed -i -e "s/{{TITLE}}/$$(sed -n -e '1{p;q;}' $< | sed -n -e 's/<!--\(.*\)-->/\1/p')/g" $@
