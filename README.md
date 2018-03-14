@@ -16,4 +16,6 @@ what's necessary for my website.  All features are subject to change and I
 won't be adding any features I'm not using.
 
 You can see my website [here](https://jdw1996.github.io/).  It is the only site
-I am aware of that uses Muad'Dib.
+I am aware of that uses Muad'Dib.  I also wrote a post providing some
+background on this project, available
+[here](https://jdw1996.github.io/2018-03-12-writing-my-own-static-site-generator-with-a-makefile.html).
