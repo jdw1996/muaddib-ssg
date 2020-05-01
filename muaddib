@@ -13,22 +13,28 @@ MAIN_PAGE_TEMPLATE := ${SOURCE_DIR}/_index.html
 MAIN_PAGE_SOURCE := ${SOURCE_DIR}/index.md
 MAIN_PAGE := index.html
 
+ERROR_404_PAGE_SOURCE := ${SOURCE_DIR}/_404.html
+ERROR_404_PAGE := 404.html
+
 STYLESHEET_SOURCE := ${SOURCE_DIR}/_style.css
 STYLESHEET := ${ASSETS_DIR}/style.css
 
 .PHONY: all clean
 
-all: ${MAIN_PAGE} ${POSTS} ${STYLESHEET}
+all: ${MAIN_PAGE} ${POSTS} ${STYLESHEET} ${ERROR_404_PAGE}
 
 ${MAIN_PAGE}: ${MAIN_PAGE_SOURCE} ${MAIN_PAGE_TEMPLATE}
-	pandoc --smart $< -o ${MAIN_PAGE_SOURCE}.tmp
+	pandoc --from markdown+smart $< -o ${MAIN_PAGE_SOURCE}.tmp
 	sed -e "/{{BODY}}/{r $<.tmp" -e "d}" ${MAIN_PAGE_TEMPLATE} > $@
 	sed -i -e "s/{{TITLE}}/$$(sed -n -e '1{p;q;}' $< | sed -n -e 's/<!--\(.*\)-->/\1/p')/g" $@
 	sed -i -e "s/{{YEAR}}/$$(date +'%Y')/g" $@
 	rm -f $<.tmp
 
+${ERROR_404_PAGE}: ${ERROR_404_PAGE_SOURCE}
+	cp -f $< $@
+
 %.html: ${SOURCE_DIR}/%.md ${POST_TEMPLATE}
-	pandoc --smart $< -o $<.tmp
+	pandoc --from markdown+smart $< -o $<.tmp
 	sed -e "/{{BODY}}/{r $<.tmp" -e "d}" ${POST_TEMPLATE} > $@
 	sed -i -e "s/{{TITLE}}/$$(sed -n -e '1{p;q;}' $< | sed -n -e 's/<!--\(.*\)-->/\1/p')/g" $@
 	sed -i -e "s/{{DATE}}/$$(sed -n -e '2{p;q;}' $< | sed -n -e 's/<!--\(.*\)-->/\1/p')/g" $@
